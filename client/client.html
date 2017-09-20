@@ -10,7 +10,97 @@
          online at your node.js address under /socket.io/socket.io.js 
          You can disable that on the server if desired
     -->
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script type="text/babel">
+    const connectSocket = (e) => {
+        const message = document.querySelector("#message");
+        const chat = document.querySelector("#chat");
+        const socket = io.connect();
+        const disconnectBut = document.querySelector("#disconnect");
+         const send = document.querySelector("#send");
+        
+        //establish a connection
+        socket.on('connect', () => {
+           console.log("connection");
+           disconnectBut.disabled = false;
+           send.disabled = false;
+           let user = document.querySelector("#username").value;
+            
+            if(!user) {
+                user = "unknown";
+            }
+            
+            //ask to join 
+            socket.emit("join", {name:user});
+            
+        });
+        
+        //recieve msg from server
+        socket.on('msg',(data) => {
+            chat.innerHTML += `\n` + data.name +" said: "+ data.msg + `\n`;
+        });
+        
+        //make msg and send it to server
+        send.addEventListener('click',function(){
+            let message = document.querySelector("#message");
+            //check to see if the sent message is "/r"
+            if(message.value == "/r")
+            {
+              console.log("rolling");
+              socket.emit("roll");
+            }
+            //check to see if they are looking for date
+            else if(message.value == "/d")
+            {
+              console.log("getting date");
+              socket.emit("date");
+            }
+            else if(message.value.includes("/u"))
+            {
+                const newusername = message.value.replace("/u ","");
+                socket.emit("changeUsername",newusername);
+            }
+            else
+            {
+              console.log("message sent");
+              socket.emit("msgToServer", {msg:message.value});
+            }
+        });
+        
+        //disable connect button after connection is made
+        const connect = document.querySelector("#connect");
+        connect.disabled = true;
+        
+        const disconnect = () => {
+          socket.disconnect(); 
+         connect.disabled = false;
+         disconnectBut.disabled = true;
+         send.disabled = true;
+        };
+        
+        disconnectBut.addEventListener('click',disconnect);
+        
+    };
+
+
+
+    const init = () => {
+        const connect = document.querySelector("#connect");
+        connect.addEventListener('click',connectSocket);
+        //disable disconnection and send button until connected
+        const disconnectBut = document.querySelector("#disconnect");
+        disconnectBut.disabled = true;
+        const sendBut = document.querySelector("#send");
+        sendBut.disabled = true;
+        
+    }
+    
+    window.onload = init;
+
+
+    </script>
+    
 	<style>
 		textarea {
 			display: block;
@@ -26,6 +116,7 @@
 	<label for="message">Message:</label>
 	<input id="message" name="message" type="text"/>
 	<input id="send" type="button" value="send" />
+    <input id="disconnect" type="button" value="disconnect"/>
 	
 	<textarea id="chat" rows="20" cols="40" readonly> </textarea>
 </body>

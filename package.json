@@ -1,0 +1,29 @@
+{
+  "name": "websockets-chat-starter",
+  "version": "1.0.0",
+  "description": "project for websocket chat server",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests Complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/siuster95/websockets-chat-starter.git"
+  },
+  "author": "Johnny Siu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/siuster95/websockets-chat-starter/issues"
+  },
+  "homepage": "https://github.com/siuster95/websockets-chat-starter#readme",
+  "dependencies": {
+    "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0"
+  }
+}
