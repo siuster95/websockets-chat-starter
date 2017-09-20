@@ -114,7 +114,7 @@ const onExtras = (sock) => {
   // getting the date back
   socket.on('date', () => {
     const date = new Date().toLocaleString("en-US", {timeZone: "America/New_York"});
-    socket.emit('msg', { name: 'server', msg: `The date and time currently is: ${date}` });
+    socket.emit('msg', { name: 'server', msg: `The date and time currently is: ${date} in New York` });
   });
 
   // change the username
